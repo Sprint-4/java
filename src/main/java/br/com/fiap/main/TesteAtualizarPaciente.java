@@ -2,12 +2,12 @@ package br.com.fiap.main;
 
 import br.com.fiap.beans.Paciente;
 import br.com.fiap.dao.PacienteDAO;
-
 import javax.swing.*;
 import java.sql.SQLException;
 
 public class TesteAtualizarPaciente {
-    static String texto (String j) {
+
+    static String texto(String j) {
         return JOptionPane.showInputDialog(j);
     }
 
@@ -15,25 +15,15 @@ public class TesteAtualizarPaciente {
         return Integer.parseInt(JOptionPane.showInputDialog(j));
     }
 
-    static double real (String j) {
-        return Double.parseDouble(JOptionPane.showInputDialog(j));
-    }
-
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-
-        PacienteDAO pacienteDAO = new PacienteDAO();
-
         Paciente objPaciente = new Paciente();
+        PacienteDAO dao = new PacienteDAO();
 
-       objPaciente.setId(inteiro("informe seu id"));
-       objPaciente.setCpf(texto("informe seu cpf"));
-       objPaciente.setNome("informe seu nome");
-       objPaciente.setTelefone("informe seu telefone");
+        objPaciente.setId(inteiro("Informe o ID do paciente:"));
+        objPaciente.setNome(texto("Informe o novo nome:"));
+        objPaciente.setCpf(texto("Informe o novo CPF:"));
+        objPaciente.setTelefone(texto("Informe o novo telefone:"));
 
-
-
-
-
-
+        System.out.println(dao.atualizar(objPaciente));
     }
 }

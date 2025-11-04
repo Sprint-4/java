@@ -1,15 +1,13 @@
 package br.com.fiap.main;
 
 import br.com.fiap.beans.Usuario;
-import br.com.fiap.dao.MedicoDAO;
 import br.com.fiap.dao.UsuarioDAO;
-
 import javax.swing.*;
 import java.sql.SQLException;
 
 public class TesteAtualizarUsuario {
 
-    static String texto (String j) {
+    static String texto(String j) {
         return JOptionPane.showInputDialog(j);
     }
 
@@ -17,30 +15,19 @@ public class TesteAtualizarUsuario {
         return Integer.parseInt(JOptionPane.showInputDialog(j));
     }
 
-    static double real (String j) {
+    static double real(String j) {
         return Double.parseDouble(JOptionPane.showInputDialog(j));
     }
 
-
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-
         // Instanciar objetos
         UsuarioDAO usuarioDAO = new UsuarioDAO();
+        Usuario objUsuario = new Usuario();
 
-        Usuario objUsuario= new Usuario();
+        // Coletar dados
+        objUsuario.setId(inteiro("Informe o ID do Usuário que será atualizado:"));
 
-        objUsuario.setId(inteiro("Informe o ID do Medico que sera atualizado "));
-        objUsuario.setLogin(texto("Informe o CRM que sera atualizado "));
-        objUsuario.setPerfil(texto("Nome que sera atualizado "));
-        objUsuario.setSenha(inteiro("Nome que sera atualizado "));
-
-
-
-        System.out.println(UsuarioDAO.atualizar(objUsuario));
-
+        // Executar atualização
+        System.out.println(usuarioDAO.atualizar(objUsuario));
     }
-
 }
-
-
-

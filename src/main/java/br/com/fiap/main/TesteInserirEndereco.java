@@ -29,7 +29,7 @@ public class TesteInserirEndereco {
 
         objEndereco.setId(inteiro("ID que deseja inserir"));
         objEndereco.setRua(texto("Rua que deseja inserir"));
-        objEndereco.setNumero(texto("Numero da casa que deseja insereir"));
+        objEndereco.setNumero(inteiro("Informe o novo numero que deseja inserir :"));
         objEndereco.setCidade(texto("Cidade que deseja inserir"));
         objEndereco.setEstado(texto("Estado que deseja inserir"));
 

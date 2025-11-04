@@ -21,8 +21,6 @@ public class TesteSelecionarUsuario {
                 System.out.println(
                         a.getId() + " " +
                                 a.getId() + " " +
-                                a.getLogin() + " " +
-                                a.getPerfil()+ " " +
                                 a.getSenha()+ " "
 
 

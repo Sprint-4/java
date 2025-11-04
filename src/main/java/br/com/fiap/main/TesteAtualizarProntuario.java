@@ -1,15 +1,14 @@
 package br.com.fiap.main;
 
-
 import br.com.fiap.beans.Prontuario;
+import br.com.fiap.beans.Paciente;
 import br.com.fiap.dao.ProntuarioDAO;
 import javax.swing.*;
 import java.sql.SQLException;
 
 public class TesteAtualizarProntuario {
 
-
-    static String texto (String j) {
+    static String texto(String j) {
         return JOptionPane.showInputDialog(j);
     }
 
@@ -17,19 +16,16 @@ public class TesteAtualizarProntuario {
         return Integer.parseInt(JOptionPane.showInputDialog(j));
     }
 
-    static double real (String j) {
-        return Double.parseDouble(JOptionPane.showInputDialog(j));
-    }
-
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        // Instanciar objetos
-        ProntuarioDAO prontuarioDAO = new ProntuarioDAO();
-
         Prontuario objProntuario = new Prontuario();
+        ProntuarioDAO dao = new ProntuarioDAO();
+        Paciente paciente = new Paciente();
 
-        objProntuario.setId(inteiro("informe o id do prontuario"));
-        objProntuario.setHistorico(texto("informe o Prontuario"));
+        objProntuario.setId(inteiro("Informe o ID do prontuário:"));
+        paciente.setId(inteiro("Informe o ID do paciente:"));
+        objProntuario.setPaciente(paciente);
+        objProntuario.setHistorico(texto("Informe o novo histórico:"));
 
-
+        System.out.println(dao.atualizar(objProntuario));
     }
 }

@@ -1,113 +1,77 @@
 package br.com.fiap.dao;
 
-// 1. CORREÇÃO DE IMPORTS
-// br.com.fiap.beans.Consulta; // Import não utilizado
-import br.com.fiap.beans.Paciente; // Importação necessária
 import br.com.fiap.beans.Prontuario;
+import br.com.fiap.beans.Paciente;
 import br.com.fiap.conexoes.ConexaoFactory;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProntuarioDAO {
 
-    public Connection minhaconexao;
+    private Connection minhaconexao;
 
     public ProntuarioDAO() throws SQLException, ClassNotFoundException {
         this.minhaconexao = new ConexaoFactory().conexao();
     }
 
-    public String inserir(Prontuario prontuario) throws SQLException {
-
-        PreparedStatement stmt = minhaconexao.prepareStatement(
-                "INSERT INTO TB_PRONTUARIO (ID_PRONTUARIO, ID_PACIENTE, DS_HISTORICO) VALUES (?, ?, ?)");
-
-        stmt.setInt(1, prontuario.getId());
-        stmt.setInt(2, prontuario.getPaciente().getId()); // Pegando o ID do objeto Paciente
-        stmt.setString(3, prontuario.getHistorico());
-
+    public String inserir(Prontuario p) throws SQLException {
+        String sql = "INSERT INTO TB_PRONTUARIO (ID, ID_PACIENTE, DS_HISTORICO) VALUES (?, ?, ?)";
+        PreparedStatement stmt = minhaconexao.prepareStatement(sql);
+        stmt.setInt(1, p.getId());
+        stmt.setInt(2, p.getPaciente().getId());
+        stmt.setString(3, p.getHistorico());
         stmt.execute();
         stmt.close();
-
-        return "Prontuário cadastrado com sucesso";
+        return "Prontuário inserido com sucesso";
     }
 
-    // --- DELETE ---
+    public String atualizar(Prontuario p) throws SQLException {
+        String sql = "UPDATE TB_PRONTUARIO SET ID_PACIENTE=?, DS_HISTORICO=? WHERE Id=?";
+        PreparedStatement stmt = minhaconexao.prepareStatement(sql);
+        stmt.setInt(1, p.getPaciente().getId());
+        stmt.setString(2, p.getHistorico());
+        stmt.setInt(3, p.getId());
+        stmt.executeUpdate();
+        stmt.close();
+        return "Prontuário atualizado com sucesso";
+    }
 
     public String deletar(int id) throws SQLException {
-        PreparedStatement stmt = minhaconexao.prepareStatement(
-                "DELETE FROM TB_PRONTUARIO WHERE ID_PRONTUARIO = ?");
-
+        String sql = "DELETE FROM TB_PRONTUARIO WHERE Id=?";
+        PreparedStatement stmt = minhaconexao.prepareStatement(sql);
         stmt.setInt(1, id);
-
-        stmt.execute();
+        stmt.executeUpdate();
         stmt.close();
-
         return "Prontuário deletado com sucesso";
     }
 
-    // --- UPDATE ---
-
-    public String atualizar(Prontuario prontuario) throws SQLException {
-
-        PreparedStatement stmt = minhaconexao.prepareStatement(
-                "UPDATE TB_PRONTUARIO SET ID_PACIENTE = ?, DS_HISTORICO = ? WHERE ID_PRONTUARIO = ?");
-
-        // A ordem dos 'set' deve bater com a SQL
-        stmt.setInt(1, prontuario.getPaciente().getId());
-        stmt.setString(2, prontuario.getHistorico());
-        stmt.setInt(3, prontuario.getId());
-
-        stmt.executeUpdate();
-        stmt.close();
-
-        return "Prontuário atualizado com sucesso!";
-    }
-
-
     public List<Prontuario> selecionar() throws SQLException {
-        ArrayList<Prontuario> listaProntuarios = new ArrayList<>(); // Mudei o nome
-
-
-        PreparedStatement stmt = minhaconexao.prepareStatement(
-                "SELECT " +
-                        "    PR.ID_PRONTUARIO, PR.DS_HISTORICO, " +
-                        "    PA.ID_PACIENTE, PA.NM_PACIENTE, PA.NR_CPF " +
-                        "FROM " +
-                        "    TB_PRONTUARIO PR " +
-                        "INNER JOIN " +
-                        "    TB_PACIENTE PA ON PR.ID_PACIENTE = PA.ID_PACIENTE");
-
+        List<Prontuario> lista = new ArrayList<>();
+        String sql = "SELECT ID_PRONTUARIO, ID_PACIENTE, DS_HISTORICO FROM TB_PRONTUARIO";
+        PreparedStatement stmt = minhaconexao.prepareStatement(sql);
         ResultSet rs = stmt.executeQuery();
 
         while (rs.next()) {
-            // Criando os objetos para popular
-            Prontuario objProntuario = new Prontuario();
-            Paciente objPaciente = new Paciente();
 
-            // 1. Populando o Paciente
-            objPaciente.setId(rs.getInt("ID_PACIENTE"));
-            objPaciente.setNome(rs.getString("NM_PACIENTE"));
-            objPaciente.setCpf(rs.getString("NR_CPF"));
+            Prontuario p = new Prontuario();
+            Paciente pac = new Paciente();
 
 
-            // 2. Populando o Prontuário
-            objProntuario.setId(rs.getInt("ID_PRONTUARIO"));
-            objProntuario.setHistorico(rs.getString("DS_HISTORICO"));
+            p.setId(rs.getInt("ID_PRONTUARIO"));
 
-            // Associando o paciente ao prontuário
-            objProntuario.setPaciente(objPaciente);
 
-            listaProntuarios.add(objProntuario);
+            pac.setId(rs.getInt("ID_PACIENTE"));
+            p.setPaciente(pac);
+
+
+            p.setHistorico(rs.getString("DS_HISTORICO"));
+            lista.add(p);
         }
-
         rs.close();
         stmt.close();
 
-        return listaProntuarios;
+        return lista;
+
     }
 }

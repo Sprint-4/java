@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public class TesteAtualizarConvenio {
 
-    static String texto (String j) {
+    static String texto(String j) {
         return JOptionPane.showInputDialog(j);
     }
 
@@ -15,27 +15,21 @@ public class TesteAtualizarConvenio {
         return Integer.parseInt(JOptionPane.showInputDialog(j));
     }
 
-    static double real (String j) {
+    static double real(String j) {
         return Double.parseDouble(JOptionPane.showInputDialog(j));
     }
 
-
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
 
-        // Instanciar objetos
         ConvenioDAO convenioDAO = new ConvenioDAO();
-
-        Convenio objConvenio= new Convenio();
-
-        objConvenio.setId(inteiro("Informe o ID do Endereco que sera atualizado "));
-        objConvenio.setCobertura(texto("Cobertura que sera atualizada "));
-        objConvenio.setNome(texto("Nome do convenio que sera atualizado "));
+        Convenio objConvenio = new Convenio();
 
 
+        objConvenio.setId(inteiro("Informe o ID do Convênio que será atualizado:"));
+        objConvenio.setCobertura(texto("Informe a nova cobertura do convênio:"));
+        objConvenio.setNome(texto("Informe o novo nome do convênio:"));
 
-        System.out.println(ConvenioDAO.atualizar(objConvenio));
 
+        System.out.println(convenioDAO.atualizar(objConvenio));
     }
-
 }
-

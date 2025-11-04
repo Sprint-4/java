@@ -30,9 +30,7 @@ public class TesteInserirUsuario {
         Usuario objUsuario = new Usuario();
 
         objUsuario.setId(inteiro("ID que deseja inserir"));
-        objUsuario.setPerfil(texto("Nome do Usuario deseja inserir"));
-        objUsuario.setSenha(inteiro("CPF do Usuario que deseja insereir"));
-        objUsuario.setLogin(texto("Telefone do Usuario que deseja insereir"));
+        objUsuario.setSenha(texto("CPF do Usuario que deseja insereir"));
 
 
 

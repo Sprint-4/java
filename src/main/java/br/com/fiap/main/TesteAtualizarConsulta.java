@@ -2,14 +2,13 @@ package br.com.fiap.main;
 
 import br.com.fiap.beans.Consulta;
 import br.com.fiap.dao.ConsultaDAO;
-import br.com.fiap.dao.EnderecoDAO;
 import javax.swing.*;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 public class TesteAtualizarConsulta {
 
-    static String texto (String j) {
+    static String texto(String j) {
         return JOptionPane.showInputDialog(j);
     }
 
@@ -17,24 +16,21 @@ public class TesteAtualizarConsulta {
         return Integer.parseInt(JOptionPane.showInputDialog(j));
     }
 
-    static double real (String j) {
+    static double real(String j) {
         return Double.parseDouble(JOptionPane.showInputDialog(j));
     }
 
-
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-
         // Instanciar objetos
-        Consulta objConsulta= new Consulta();
+        ConsultaDAO dao = new ConsultaDAO();
+        Consulta objConsulta = new Consulta();
 
-        objConsulta.setId(inteiro("Informe o ID da Consulta que sera atualizado "));
-        objConsulta.setDataHora(LocalDateTime.parse(texto("Para que hora deseja mudar sua consulta")));
-        objConsulta.setStatus(texto("Para qual Status deseja atualizar  "));
+        // Coletar dados
+        objConsulta.setId(inteiro("Informe o ID da Consulta que será atualizada:"));
+        objConsulta.setDataHora(LocalDateTime.parse(texto("Informe a nova data/hora da consulta (ex: 2025-11-04T14:30):")));
+        objConsulta.setStatus(texto("Informe o novo status da consulta:"));
 
-        System.out.println(ConsultaDAO.atualizar(objConsulta));
 
+        System.out.println(dao.atualizar(objConsulta));
     }
-
 }
-
-
