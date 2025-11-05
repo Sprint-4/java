@@ -14,50 +14,61 @@ public class PacienteDAO {
     }
 
     public String inserir(Paciente p) throws SQLException {
-        String sql = "INSERT INTO PACIENTE (ID, NOME, IDADE, TELEFONE, EXAME) VALUES (?, ?, ?,)";
+        String sql = "INSERT INTO TB_PACIENTE (ID_PACIENTE, NM_PACIENTE, NR_CPF, NR_TELEFONE, ID_ENDERECO, ID_CONVENIO) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement stmt = minhaconexao.prepareStatement(sql);
         stmt.setInt(1, p.getId());
         stmt.setString(2, p.getNome());
-        stmt.setString(3, p.getTelefone());
+        stmt.setString(3, p.getCpf());
+        stmt.setString(4, p.getTelefone());
+        stmt.setInt(5, p.getEndereco().getId());
+        stmt.setInt(6, p.getConvenio().getId());
         stmt.execute();
         stmt.close();
+        minhaconexao.close();
         return "Paciente inserido com sucesso";
     }
 
     public String atualizar(Paciente p) throws SQLException {
-        String sql = "UPDATE PACIENTE SET NOME=?,  TELEFONE=? WHERE ID=?";
+        String sql = "UPDATE TB_PACIENTE SET NM_PACIENTE=?, NR_CPF=?, NR_TELEFONE=?, ID_ENDERECO=?, ID_CONVENIO=? WHERE ID_PACIENTE=?";
         PreparedStatement stmt = minhaconexao.prepareStatement(sql);
         stmt.setString(1, p.getNome());
-        stmt.setString(2, p.getTelefone());
-        stmt.setInt(3, p.getId());
+        stmt.setString(2, p.getCpf());
+        stmt.setString(3, p.getTelefone());
+        stmt.setInt(4, p.getEndereco().getId());
+        stmt.setInt(5, p.getConvenio().getId());
+        stmt.setInt(6, p.getId());
         stmt.executeUpdate();
         stmt.close();
+        minhaconexao.close();
         return "Paciente atualizado com sucesso";
     }
 
     public String deletar(int id) throws SQLException {
-        String sql = "DELETE FROM PACIENTE WHERE ID=?";
+        String sql = "DELETE FROM TB_PACIENTE WHERE ID_PACIENTE=?";
         PreparedStatement stmt = minhaconexao.prepareStatement(sql);
         stmt.setInt(1, id);
         stmt.executeUpdate();
         stmt.close();
+        minhaconexao.close();
         return "Paciente deletado com sucesso";
     }
 
     public List<Paciente> selecionar() throws SQLException {
         List<Paciente> lista = new ArrayList<>();
-        String sql = "SELECT * FROM PACIENTE";
+        String sql = "SELECT ID_PACIENTE, NM_PACIENTE, NR_CPF, NR_TELEFONE, ID_ENDERECO, ID_CONVENIO FROM TB_PACIENTE";
         PreparedStatement stmt = minhaconexao.prepareStatement(sql);
         ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
             Paciente p = new Paciente();
-            p.setId(rs.getInt("ID"));
-            p.setNome(rs.getString("NOME"));
-            p.setTelefone(rs.getString("TELEFONE"));
+            p.setId(rs.getInt("ID_PACIENTE"));
+            p.setNome(rs.getString("NM_PACIENTE"));
+            p.setCpf(rs.getString("NR_CPF"));
+            p.setTelefone(rs.getString("NR_TELEFONE"));
             lista.add(p);
         }
         rs.close();
         stmt.close();
+        minhaconexao.close();
         return lista;
     }
 }
