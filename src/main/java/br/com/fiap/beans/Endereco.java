@@ -1,8 +1,8 @@
 package br.com.fiap.beans;
 
 public class Endereco {
-    private int id;
-    private String rua;
+    private int idEndereco;
+    private String nomeRua;
     private int numero;
     private String cidade;
     private String estado;
@@ -10,19 +10,19 @@ public class Endereco {
 
     public Endereco() {}
 
-    public Endereco(int id, String rua, int numero, String cidade, String estado, String cep) {
-        this.id = id;
-        this.rua = rua;
+    public Endereco(int idEndereco, String nomeRua, int numero, String cidade, String estado, String cep) {
+        this.idEndereco = idEndereco;
+        this.nomeRua = nomeRua;
         this.numero = numero;
         this.cidade = cidade;
         this.estado = estado;
         this.cep = cep;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-    public String getRua() { return rua; }
-    public void setRua(String rua) { this.rua = rua; }
+    public int getIdEndereco() { return idEndereco; }
+    public void setIdEndereco(int idEndereco) { this.idEndereco = idEndereco; }
+    public String getNomeRua() { return nomeRua; }
+    public void setNomeRua(String nomeRua) { this.nomeRua = nomeRua; }
     public int getNumero() { return numero; }
     public void setNumero(int numero) { this.numero = numero; }
     public String getCidade() { return cidade; }

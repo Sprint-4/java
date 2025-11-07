@@ -1,8 +1,7 @@
 package br.com.fiap.beans;
 
 public class Paciente {
-
-    private int id;
+    private int idPaciente;
     private String nome;
     private String cpf;
     private String telefone;
@@ -11,8 +10,8 @@ public class Paciente {
 
     public Paciente() {}
 
-    public Paciente(int id, String nome, String cpf, String telefone, Endereco endereco, Convenio convenio) {
-        this.id = id;
+    public Paciente(int idPaciente, String nome, String cpf, String telefone, Endereco endereco, Convenio convenio) {
+        this.idPaciente = idPaciente;
         this.nome = nome;
         this.cpf = cpf;
         this.telefone = telefone;
@@ -20,8 +19,19 @@ public class Paciente {
         this.convenio = convenio;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public Paciente(int idPaciente, String nome, String cpf, String telefone, int idEndereco, int idConvenio) {
+        this.idPaciente = idPaciente;
+        this.nome = nome;
+        this.cpf = cpf;
+        this.telefone = telefone;
+        this.endereco = new Endereco();
+        this.endereco.setIdEndereco(idEndereco);
+        this.convenio = new Convenio();
+        this.convenio.setIdConvenio(idConvenio);
+    }
+
+    public int getIdPaciente() { return idPaciente; }
+    public void setIdPaciente(int idPaciente) { this.idPaciente = idPaciente; }
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
     public String getCpf() { return cpf; }
@@ -32,11 +42,6 @@ public class Paciente {
     public void setEndereco(Endereco endereco) { this.endereco = endereco; }
     public Convenio getConvenio() { return convenio; }
     public void setConvenio(Convenio convenio) { this.convenio = convenio; }
-
-
+    public int getIdEndereco() { return (endereco != null) ? endereco.getIdEndereco() : 0; }
+    public int getIdConvenio() { return (convenio != null) ? convenio.getIdConvenio() : 0; }
 }
-
-
-
-
-

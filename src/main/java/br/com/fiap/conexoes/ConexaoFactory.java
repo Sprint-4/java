@@ -13,6 +13,6 @@ public class ConexaoFactory {
 
         // retornar conexão com informações de nosso acesso
         return DriverManager.getConnection("jdbc:oracle:thin:@oracle.fiap.com.br:1521:orcl",
-                "rm562396" , "230407" );
+                "rm564505" , "250307" );
     }
 }

@@ -1,55 +1,31 @@
 package br.com.fiap.Bo;
 
-
+import java.sql.SQLException;
+import java.util.List;
 import br.com.fiap.beans.Endereco;
 import br.com.fiap.dao.EnderecoDAO;
-import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class EnderecoBO {
 
-    public EnderecoDAO enderecoDAO;
+    private EnderecoDAO enderecoDAO;
 
-
-    //Selecionar
-
-    public ArrayList<Endereco> selecionarBo() throws SQLException, ClassNotFoundException {
+    public EnderecoBO() throws SQLException, ClassNotFoundException {
         enderecoDAO = new EnderecoDAO();
-
-        // Regra de negócios
-
-        return (ArrayList<Endereco>) enderecoDAO.selecionar();
     }
 
-    //Inserir
-    public void inserirBo(Endereco endereco) throws SQLException, ClassNotFoundException {
-        EnderecoDAO enderecoDAO = new EnderecoDAO();
-
-        // Regra de negócios
-
+    public void inserirBo(Endereco endereco) throws SQLException {
         enderecoDAO.inserir(endereco);
     }
 
-    //Deletar
-    public void deletarBo(int codigo) throws SQLException, ClassNotFoundException {
-        EnderecoDAO enderecoDAO = new EnderecoDAO();
-
-        // Regra de negócios
-
-        enderecoDAO.deletar(codigo);
-    }
-
-    //Atualizar
-    public void atualizarBo(Endereco endereco) throws SQLException, ClassNotFoundException {
-        EnderecoDAO enderecoDAO = new EnderecoDAO();
-
-        // Regra de negócios
-
+    public void atualizarBo(Endereco endereco) throws SQLException {
         enderecoDAO.atualizar(endereco);
     }
 
+    public void deletarBo(int id) throws SQLException {
+        enderecoDAO.deletar(id);
+    }
+
+    public List<Endereco> selecionarBo() throws SQLException {
+        return enderecoDAO.selecionar();
+    }
 }
-
-
-
-

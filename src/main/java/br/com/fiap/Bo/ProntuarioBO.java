@@ -1,52 +1,31 @@
 package br.com.fiap.Bo;
 
+import java.sql.SQLException;
+import java.util.List;
 import br.com.fiap.beans.Prontuario;
 import br.com.fiap.dao.ProntuarioDAO;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-
 public class ProntuarioBO {
 
-    public ProntuarioDAO prontuarioDAO;
+    private ProntuarioDAO prontuarioDAO;
 
-
-    //Selecionar
-
-    public ArrayList<Prontuario> selecionarBo() throws SQLException, ClassNotFoundException {
-        prontuarioDAO= new ProntuarioDAO();
-
-        // Regra de negócios
-
-        return (ArrayList<Prontuario>)  prontuarioDAO.selecionar();
+    public ProntuarioBO() throws SQLException, ClassNotFoundException {
+        prontuarioDAO = new ProntuarioDAO();
     }
 
-    //Inserir
-    public void inserirBo(Prontuario prontuario) throws SQLException, ClassNotFoundException {
-        ProntuarioDAO prontuarioDAO = new ProntuarioDAO();
-
-        // Regra de negócios
-
+    public void inserirBo(Prontuario prontuario) throws SQLException {
         prontuarioDAO.inserir(prontuario);
     }
 
-    //Deletar
-    public void deletarBo(int codigo) throws SQLException, ClassNotFoundException {
-        ProntuarioDAO prontuarioDAO = new ProntuarioDAO();
-
-        // Regra de negócios
-
-        prontuarioDAO.deletar(codigo);
-    }
-
-    //Atualizar
-    public void atualizarBo(Prontuario prontuario) throws SQLException, ClassNotFoundException {
-        ProntuarioDAO prontuarioDAO = new ProntuarioDAO();
-
-        // Regra de negócios
-
+    public void atualizarBo(Prontuario prontuario) throws SQLException {
         prontuarioDAO.atualizar(prontuario);
     }
 
-}
+    public void deletarBo(int id) throws SQLException {
+        prontuarioDAO.deletar(id);
+    }
 
+    public List<Prontuario> selecionarBo() throws SQLException {
+        return prontuarioDAO.selecionar();
+    }
+}

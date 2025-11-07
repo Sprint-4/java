@@ -1,22 +1,22 @@
 package br.com.fiap.beans;
 
 public class Convenio {
-    private int id;
+    private int idConvenio;
     private String nome;
-    private String cobertura;
+    private String descricao;
 
     public Convenio() {}
 
-    public Convenio(int id, String nome, String cobertura) {
-        this.id = id;
+    public Convenio(int idConvenio, String nome, String descricao) {
+        this.idConvenio = idConvenio;
         this.nome = nome;
-        this.cobertura = cobertura;
+        this.descricao = descricao;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getIdConvenio() { return idConvenio; }
+    public void setIdConvenio(int idConvenio) { this.idConvenio = idConvenio; }
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
-    public String getCobertura() { return cobertura; }
-    public void setCobertura(String cobertura) { this.cobertura = cobertura; }
+    public String getDescricao() { return descricao; }
+    public void setDescricao(String descricao) { this.descricao = descricao; }
 }

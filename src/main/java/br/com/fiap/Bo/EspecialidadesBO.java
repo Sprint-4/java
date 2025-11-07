@@ -1,52 +1,31 @@
 package br.com.fiap.Bo;
 
-
+import java.sql.SQLException;
+import java.util.List;
 import br.com.fiap.beans.Especialidades;
 import br.com.fiap.dao.EspecialidadesDAO;
-import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class EspecialidadesBO {
 
+    private EspecialidadesDAO especialidadesDAO;
 
-    public EspecialidadesDAO especialidadesDAO;
-
-    //Selecionar
-
-    public ArrayList<Especialidades> selecionarBo() throws SQLException, ClassNotFoundException {
-          especialidadesDAO= new EspecialidadesDAO();
-
-        // Regra de negócios
-
-        return (ArrayList<Especialidades>) especialidadesDAO.selecionar();
+    public EspecialidadesBO() throws SQLException, ClassNotFoundException {
+        especialidadesDAO = new EspecialidadesDAO();
     }
 
-    //Inserir
-    public void inserirBo(Especialidades especialidades) throws SQLException, ClassNotFoundException {
-        EspecialidadesDAO especialidadesDAO = new EspecialidadesDAO();
-
-        // Regra de negócios
-
-        especialidadesDAO.inserir(especialidades);
+    public void inserirBo(Especialidades especialidade) throws SQLException {
+        especialidadesDAO.inserir(especialidade);
     }
 
-    //Deletar
-    public void deletarBo(int codigo) throws SQLException, ClassNotFoundException {
-        EspecialidadesDAO especialidadesDAO = new EspecialidadesDAO();
-
-        // Regra de negócios
-
-        especialidadesDAO.deletar(codigo);
+    public void atualizarBo(Especialidades especialidade) throws SQLException {
+        especialidadesDAO.atualizar(especialidade);
     }
 
-    //Atualizar
-    public void atualizarBo(Especialidades especialidades) throws SQLException, ClassNotFoundException {
-        EspecialidadesDAO especialidadesDAO = new EspecialidadesDAO();
-
-        // Regra de negócios
-
-        especialidadesDAO.atualizar(especialidades);
+    public void deletarBo(int id) throws SQLException {
+        especialidadesDAO.deletar(id);
     }
 
+    public List<Especialidades> selecionarBo() throws SQLException {
+        return especialidadesDAO.selecionar();
+    }
 }
-

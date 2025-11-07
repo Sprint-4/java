@@ -1,52 +1,31 @@
 package br.com.fiap.Bo;
 
+import java.sql.SQLException;
+import java.util.List;
 import br.com.fiap.beans.Usuario;
 import br.com.fiap.dao.UsuarioDAO;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-
 public class UsuarioBo {
 
+    private UsuarioDAO usuarioDAO;
 
-    public UsuarioDAO usuarioDAO;
-
-
-    //Selecionar
-
-    public ArrayList<Usuario> selecionarBo() throws SQLException, ClassNotFoundException {
-        usuarioDAO= new UsuarioDAO();
-
-        // Regra de negócios
-
-        return (ArrayList<Usuario>)  usuarioDAO.selecionar();
+    public UsuarioBo() throws SQLException, ClassNotFoundException {
+        usuarioDAO = new UsuarioDAO();
     }
 
-    //Inserir
-    public void inserirBo(Usuario usuario) throws SQLException, ClassNotFoundException {
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
-
-        // Regra de negócios
-
+    public void inserirBo(Usuario usuario) throws SQLException {
         usuarioDAO.inserir(usuario);
     }
 
-    //Deletar
-    public void deletarBo(int codigo) throws SQLException, ClassNotFoundException {
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
-
-        // Regra de negócios
-
-        usuarioDAO.deletar(codigo);
-    }
-
-    //Atualizar
-    public void atualizarBo(Usuario usuario) throws SQLException, ClassNotFoundException {
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
-
-        // Regra de negócios
-
+    public void atualizarBo(Usuario usuario) throws SQLException {
         usuarioDAO.atualizar(usuario);
     }
 
+    public void deletarBo(int id) throws SQLException {
+        usuarioDAO.deletar(id);
+    }
+
+    public List<Usuario> selecionarBo() throws SQLException {
+        return usuarioDAO.selecionar();
+    }
 }

@@ -1,19 +1,18 @@
 package br.com.fiap.beans;
 
 public class Especialidades {
-    private int id;
-    private String nome;
+    private int idEspecialidade;
+    private String nomeEspecialidade;
 
     public Especialidades() {}
 
-    public Especialidades(int id, String nome) {
-        this.id = id;
-        this.nome = nome;
+    public Especialidades(int idEspecialidade, String nomeEspecialidade) {
+        this.idEspecialidade = idEspecialidade;
+        this.nomeEspecialidade = nomeEspecialidade;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
+    public int getIdEspecialidade() { return idEspecialidade; }
+    public void setIdEspecialidade(int idEspecialidade) { this.idEspecialidade = idEspecialidade; }
+    public String getNomeEspecialidade() { return nomeEspecialidade; }
+    public void setNomeEspecialidade(String nomeEspecialidade) { this.nomeEspecialidade = nomeEspecialidade; }
 }
-

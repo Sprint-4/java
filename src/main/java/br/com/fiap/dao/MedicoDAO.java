@@ -1,82 +1,66 @@
 package br.com.fiap.dao;
 
-import br.com.fiap.beans.Medico;
-import br.com.fiap.beans.Especialidades;
-import br.com.fiap.conexoes.ConexaoFactory;
-
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import br.com.fiap.beans.Medico;
+import br.com.fiap.conexoes.ConexaoFactory;
 
 public class MedicoDAO {
 
-    private Connection minhaconexao;
+    private Connection conexao;
 
-    // Construtor, conecta ao banco de dados
     public MedicoDAO() throws SQLException, ClassNotFoundException {
-        this.minhaconexao = new ConexaoFactory().conexao();
+        this.conexao = new ConexaoFactory().conexao();
     }
 
-    // Inserir um médico no banco de dados
-    public String inserir(Medico m) throws SQLException {
-        String sql = "INSERT INTO TB_MEDICO (ID_MEDICO, NM_MEDICO, NR_CRM, ID_ESPECIALIDADE) VALUES (?, ?, ?, ?)";
-        PreparedStatement stmt = minhaconexao.prepareStatement(sql);
-        stmt.setInt(1, m.getId());
-        stmt.setString(2, m.getNome());
-        stmt.setString(3, m.getCrm());
-        stmt.setInt(4, m.getEspecialidade().getId()); // A especialidade está sendo usada para pegar o ID
-
-        stmt.execute();
-        stmt.close();
-        return "Médico inserido com sucesso";
+    // INSERT
+    public void inserir(Medico m) throws SQLException {
+        String sql = "INSERT INTO TB_MEDICO (NM_MEDICO, NR_CRM, ID_ESPECIALIDADE) VALUES (?, ?, ?)";
+        try (PreparedStatement ps = conexao.prepareStatement(sql)) {
+            ps.setString(1, m.getNome());
+            ps.setString(2, m.getCrm());
+            ps.setInt(3, m.getIdEspecialidade());
+            ps.executeUpdate();
+        }
     }
 
-    // Atualizar um médico no banco de dados
-    public String atualizar(Medico m) throws SQLException {
-        String sql = "UPDATE TB_MEDICO SET NM_MEDICO = ?, NR_CRM = ?, ID_ESPECIALIDADE = ? WHERE ID_MEDICO = ?";
-        PreparedStatement stmt = minhaconexao.prepareStatement(sql);
-        stmt.setString(1, m.getNome());
-        stmt.setString(2, m.getCrm());
-        stmt.setInt(3, m.getEspecialidade().getId()); // Atualizando o ID da especialidade
-        stmt.setInt(4, m.getId());
-
-        stmt.executeUpdate();
-        stmt.close();
-        return "Médico atualizado com sucesso";
+    // UPDATE
+    public void atualizar(Medico m) throws SQLException {
+        String sql = "UPDATE TB_MEDICO SET NM_MEDICO=?, NR_CRM=?, ID_ESPECIALIDADE=? WHERE ID_MEDICO=?";
+        try (PreparedStatement ps = conexao.prepareStatement(sql)) {
+            ps.setString(1, m.getNome());
+            ps.setString(2, m.getCrm());
+            ps.setInt(3, m.getIdEspecialidade());
+            ps.setInt(4, m.getIdMedico());
+            ps.executeUpdate();
+        }
     }
 
-    // Deletar um médico do banco de dados
-    public String deletar(int id) throws SQLException {
-        String sql = "DELETE FROM TB_MEDICO WHERE ID_MEDICO = ?";
-        PreparedStatement stmt = minhaconexao.prepareStatement(sql);
-        stmt.setInt(1, id);
-        stmt.executeUpdate();
-        stmt.close();
-        return "Médico deletado com sucesso";
+    // DELETE
+    public void deletar(int id) throws SQLException {
+        String sql = "DELETE FROM TB_MEDICO WHERE ID_MEDICO=?";
+        try (PreparedStatement ps = conexao.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }
     }
 
-    // Selecionar todos os médicos no banco de dados
+    // SELECT
     public List<Medico> selecionar() throws SQLException {
         List<Medico> lista = new ArrayList<>();
-        String sql = "SELECT ID_MEDICO, NM_MEDICO, NR_CRM, ID_ESPECIALIDADE FROM TB_MEDICO";
-        PreparedStatement stmt = minhaconexao.prepareStatement(sql);
-        ResultSet rs = stmt.executeQuery();
-
-        while (rs.next()) {
-            Medico m = new Medico();
-            Especialidades e = new Especialidades();
-
-            m.setId(rs.getInt("ID_MEDICO"));
-            m.setNome(rs.getString("NM_MEDICO"));
-            m.setCrm(rs.getString("NR_CRM"));
-            e.setId(rs.getInt("ID_ESPECIALIDADE"));
-            m.setEspecialidade(e);
-
-            lista.add(m);
+        String sql = "SELECT * FROM TB_MEDICO";
+        try (PreparedStatement ps = conexao.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Medico m = new Medico(
+                        rs.getInt("ID_MEDICO"),
+                        rs.getString("NM_MEDICO"),
+                        rs.getString("NR_CRM"),
+                        rs.getInt("ID_ESPECIALIDADE")
+                );
+                lista.add(m);
+            }
         }
-
-        rs.close();
-        stmt.close();
         return lista;
     }
 }

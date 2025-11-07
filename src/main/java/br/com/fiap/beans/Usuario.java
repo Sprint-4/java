@@ -1,18 +1,18 @@
 package br.com.fiap.beans;
 
 public class Usuario {
-    private int id;
+    private int idUsuario;
     private String senha;
 
     public Usuario() {}
 
-    public Usuario(int id, String senha) {
-        this.id = id;
+    public Usuario(int idUsuario, String senha) {
+        this.idUsuario = idUsuario;
         this.senha = senha;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getIdUsuario() { return idUsuario; }
+    public void setIdUsuario(int idUsuario) { this.idUsuario = idUsuario; }
     public String getSenha() { return senha; }
     public void setSenha(String senha) { this.senha = senha; }
 }

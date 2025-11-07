@@ -1,74 +1,72 @@
 package br.com.fiap.dao;
 
+import java.sql.*;
+import java.util.*;
 import br.com.fiap.beans.Paciente;
 import br.com.fiap.conexoes.ConexaoFactory;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class PacienteDAO {
-    private Connection minhaconexao;
+
+    private Connection conexao;
 
     public PacienteDAO() throws SQLException, ClassNotFoundException {
-        this.minhaconexao = new ConexaoFactory().conexao();
+        this.conexao = new ConexaoFactory().conexao();
     }
 
-    public String inserir(Paciente p) throws SQLException {
-        String sql = "INSERT INTO TB_PACIENTE (ID_PACIENTE, NM_PACIENTE, NR_CPF, NR_TELEFONE, ID_ENDERECO, ID_CONVENIO) VALUES (?, ?, ?, ?, ?, ?)";
-        PreparedStatement stmt = minhaconexao.prepareStatement(sql);
-        stmt.setInt(1, p.getId());
-        stmt.setString(2, p.getNome());
-        stmt.setString(3, p.getCpf());
-        stmt.setString(4, p.getTelefone());
-        stmt.setInt(5, p.getEndereco().getId());
-        stmt.setInt(6, p.getConvenio().getId());
-        stmt.execute();
-        stmt.close();
-        minhaconexao.close();
-        return "Paciente inserido com sucesso";
+    // INSERT
+    public void inserir(Paciente p) throws SQLException {
+        String sql = "INSERT INTO TB_PACIENTE (NM_PACIENTE, NR_CPF, NR_TELEFONE, ID_ENDERECO, ID_CONVENIO) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = conexao.prepareStatement(sql)) {
+            ps.setString(1, p.getNome());
+            ps.setString(2, p.getCpf());
+            ps.setString(3, p.getTelefone());
+            ps.setInt(4, p.getIdEndereco());
+            ps.setInt(5, p.getIdConvenio());
+            ps.executeUpdate();
+        }
     }
 
-    public String atualizar(Paciente p) throws SQLException {
+    // UPDATE
+    public void atualizar(Paciente p) throws SQLException {
         String sql = "UPDATE TB_PACIENTE SET NM_PACIENTE=?, NR_CPF=?, NR_TELEFONE=?, ID_ENDERECO=?, ID_CONVENIO=? WHERE ID_PACIENTE=?";
-        PreparedStatement stmt = minhaconexao.prepareStatement(sql);
-        stmt.setString(1, p.getNome());
-        stmt.setString(2, p.getCpf());
-        stmt.setString(3, p.getTelefone());
-        stmt.setInt(4, p.getEndereco().getId());
-        stmt.setInt(5, p.getConvenio().getId());
-        stmt.setInt(6, p.getId());
-        stmt.executeUpdate();
-        stmt.close();
-        minhaconexao.close();
-        return "Paciente atualizado com sucesso";
+        try (PreparedStatement ps = conexao.prepareStatement(sql)) {
+            ps.setString(1, p.getNome());
+            ps.setString(2, p.getCpf());
+            ps.setString(3, p.getTelefone());
+            ps.setInt(4, p.getIdEndereco());
+            ps.setInt(5, p.getIdConvenio());
+            ps.setInt(6, p.getIdPaciente());
+            ps.executeUpdate();
+        }
     }
 
-    public String deletar(int id) throws SQLException {
+    // DELETE
+    public void deletar(int id) throws SQLException {
         String sql = "DELETE FROM TB_PACIENTE WHERE ID_PACIENTE=?";
-        PreparedStatement stmt = minhaconexao.prepareStatement(sql);
-        stmt.setInt(1, id);
-        stmt.executeUpdate();
-        stmt.close();
-        minhaconexao.close();
-        return "Paciente deletado com sucesso";
+        try (PreparedStatement ps = conexao.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }
     }
 
+    // SELECT
     public List<Paciente> selecionar() throws SQLException {
         List<Paciente> lista = new ArrayList<>();
-        String sql = "SELECT ID_PACIENTE, NM_PACIENTE, NR_CPF, NR_TELEFONE, ID_ENDERECO, ID_CONVENIO FROM TB_PACIENTE";
-        PreparedStatement stmt = minhaconexao.prepareStatement(sql);
-        ResultSet rs = stmt.executeQuery();
-        while (rs.next()) {
-            Paciente p = new Paciente();
-            p.setId(rs.getInt("ID_PACIENTE"));
-            p.setNome(rs.getString("NM_PACIENTE"));
-            p.setCpf(rs.getString("NR_CPF"));
-            p.setTelefone(rs.getString("NR_TELEFONE"));
-            lista.add(p);
+        String sql = "SELECT * FROM TB_PACIENTE";
+        try (PreparedStatement ps = conexao.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Paciente p = new Paciente(
+                        rs.getInt("ID_PACIENTE"),
+                        rs.getString("NM_PACIENTE"),
+                        rs.getString("NR_CPF"),
+                        rs.getString("NR_TELEFONE"),
+                        rs.getInt("ID_ENDERECO"),
+                        rs.getInt("ID_CONVENIO")
+                );
+                lista.add(p);
+            }
         }
-        rs.close();
-        stmt.close();
-        minhaconexao.close();
         return lista;
     }
 }

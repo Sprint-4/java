@@ -1,73 +1,72 @@
 package br.com.fiap.dao;
 
+import java.sql.*;
+import java.util.*;
 import br.com.fiap.beans.Endereco;
 import br.com.fiap.conexoes.ConexaoFactory;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class EnderecoDAO {
-    private Connection minhaconexao;
+
+    private Connection conexao;
 
     public EnderecoDAO() throws SQLException, ClassNotFoundException {
-        this.minhaconexao = new ConexaoFactory().conexao();
+        this.conexao = new ConexaoFactory().conexao();
     }
 
-    public String inserir(Endereco e) throws SQLException {
-        String sql = "INSERT INTO TB_ENDERECO (ID_ENDERECO, NM_RUA, NR_ENDERECO, NM_CIDADE, SG_ESTADO) VALUES (?, ?, ?, ?, ?)";
-        PreparedStatement stmt = minhaconexao.prepareStatement(sql);
-        stmt.setInt(1, e.getId());
-        stmt.setString(2, e.getRua());
-        stmt.setInt(3, e.getNumero());
-        stmt.setString(4, e.getCidade());
-        stmt.setString(5, e.getEstado());
-        stmt.execute();
-        stmt.close();
-        minhaconexao.close();
-        return "Endereço inserido com sucesso";
+    // INSERT
+    public void inserir(Endereco e) throws SQLException {
+        String sql = "INSERT INTO TB_ENDERECO (NM_RUA, NR_ENDERECO, NM_CIDADE, SG_ESTADO, NR_CEP) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = conexao.prepareStatement(sql)) {
+            ps.setString(1, e.getNomeRua());
+            ps.setInt(2, e.getNumero());
+            ps.setString(3, e.getCidade());
+            ps.setString(4, e.getEstado());
+            ps.setString(5, e.getCep());
+            ps.executeUpdate();
+        }
     }
 
-    public String atualizar(Endereco e) throws SQLException {
-        String sql = "UPDATE TB_ENDERECO SET NM_RUA=?, NR_ENDERECO=?, NM_CIDADE=?, SG_ESTADO=? WHERE ID_ENDERECO=?";
-        PreparedStatement stmt = minhaconexao.prepareStatement(sql);
-        stmt.setString(1, e.getRua());
-        stmt.setInt(2, e.getNumero());
-        stmt.setString(3, e.getCidade());
-        stmt.setString(4, e.getEstado());
-        stmt.setInt(5, e.getId());
-        stmt.executeUpdate();
-        stmt.close();
-        minhaconexao.close();
-        return "Endereço atualizado com sucesso";
+    // UPDATE
+    public void atualizar(Endereco e) throws SQLException {
+        String sql = "UPDATE TB_ENDERECO SET NM_RUA=?, NR_ENDERECO=?, NM_CIDADE=?, SG_ESTADO=?, NR_CEP=? WHERE ID_ENDERECO=?";
+        try (PreparedStatement ps = conexao.prepareStatement(sql)) {
+            ps.setString(1, e.getNomeRua());
+            ps.setInt(2, e.getNumero());
+            ps.setString(3, e.getCidade());
+            ps.setString(4, e.getEstado());
+            ps.setString(5, e.getCep());
+            ps.setInt(6, e.getIdEndereco());
+            ps.executeUpdate();
+        }
     }
 
-    public String deletar(int id) throws SQLException {
+    // DELETE
+    public void deletar(int id) throws SQLException {
         String sql = "DELETE FROM TB_ENDERECO WHERE ID_ENDERECO=?";
-        PreparedStatement stmt = minhaconexao.prepareStatement(sql);
-        stmt.setInt(1, id);
-        stmt.executeUpdate();
-        stmt.close();
-        minhaconexao.close();
-        return "Endereço deletado com sucesso";
+        try (PreparedStatement ps = conexao.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }
     }
 
+    // SELECT
     public List<Endereco> selecionar() throws SQLException {
         List<Endereco> lista = new ArrayList<>();
-        String sql = "SELECT ID_ENDERECO, NM_RUA, NR_ENDERECO, NM_CIDADE, SG_ESTADO FROM TB_ENDERECO";
-        PreparedStatement stmt = minhaconexao.prepareStatement(sql);
-        ResultSet rs = stmt.executeQuery();
-        while (rs.next()) {
-            Endereco e = new Endereco();
-            e.setId(rs.getInt("ID_ENDERECO"));
-            e.setRua(rs.getString("NM_RUA"));
-            e.setNumero(rs.getInt("NR_ENDERECO"));
-            e.setCidade(rs.getString("NM_CIDADE"));
-            e.setEstado(rs.getString("SG_ESTADO"));
-            lista.add(e);
+        String sql = "SELECT * FROM TB_ENDERECO";
+        try (PreparedStatement ps = conexao.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Endereco e = new Endereco(
+                        rs.getInt("ID_ENDERECO"),
+                        rs.getString("NM_RUA"),
+                        rs.getInt("NR_ENDERECO"),
+                        rs.getString("NM_CIDADE"),
+                        rs.getString("SG_ESTADO"),
+                        rs.getString("NR_CEP")
+                );
+                lista.add(e);
+            }
         }
-        rs.close();
-        stmt.close();
-        minhaconexao.close();
         return lista;
     }
 }

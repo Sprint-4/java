@@ -1,52 +1,31 @@
 package br.com.fiap.Bo;
 
-
+import java.sql.SQLException;
+import java.util.List;
 import br.com.fiap.beans.Paciente;
 import br.com.fiap.dao.PacienteDAO;
-import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class PacienteBO {
 
-    public PacienteDAO pacienteDAO;
+    private PacienteDAO pacienteDAO;
 
-
-    //Selecionar
-
-    public ArrayList<Paciente> selecionarBo() throws SQLException, ClassNotFoundException {
-        pacienteDAO= new PacienteDAO();
-
-        // Regra de negócios
-
-        return (ArrayList<Paciente>)  pacienteDAO.selecionar();
+    public PacienteBO() throws SQLException, ClassNotFoundException {
+        pacienteDAO = new PacienteDAO();
     }
 
-    //Inserir
-    public void inserirBo(Paciente paciente) throws SQLException, ClassNotFoundException {
-        PacienteDAO pacienteDAO = new PacienteDAO();
-
-        // Regra de negócios
-
+    public void inserirBo(Paciente paciente) throws SQLException {
         pacienteDAO.inserir(paciente);
     }
 
-    //Deletar
-    public void deletarBo(int codigo) throws SQLException, ClassNotFoundException {
-        PacienteDAO pacienteDAO = new PacienteDAO();
-
-        // Regra de negócios
-
-        pacienteDAO.deletar(codigo);
-    }
-
-    //Atualizar
-    public void atualizarBo(Paciente paciente) throws SQLException, ClassNotFoundException {
-        PacienteDAO pacienteDAO = new PacienteDAO();
-
-        // Regra de negócios
-
+    public void atualizarBo(Paciente paciente) throws SQLException {
         pacienteDAO.atualizar(paciente);
     }
 
-}
+    public void deletarBo(int id) throws SQLException {
+        pacienteDAO.deletar(id);
+    }
 
+    public List<Paciente> selecionarBo() throws SQLException {
+        return pacienteDAO.selecionar();
+    }
+}
